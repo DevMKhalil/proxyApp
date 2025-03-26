@@ -5,14 +5,11 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// إضافة الخدمات الأساسية وإعداد HttpClient والميدلوير
+// إضافة الخدمات الأساسية وإعداد HttpClient
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// تسجيل الميدلوير المخصص للتحقق من API Key
-builder.Services.AddSingleton<ApiKeyMiddleware>();
 
 var app = builder.Build();
 
