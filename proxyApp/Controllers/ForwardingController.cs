@@ -13,7 +13,8 @@ public class ForwardingController : ControllerBase
     // حقن HttpClient وإعدادات ngrok من التكوين
     public ForwardingController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
     {
-        _httpClient = httpClientFactory.CreateClient();
+        //_httpClient = httpClientFactory.CreateClient();
+        _httpClient = httpClientFactory.CreateClient("NoSSLValidation");
         _ngrokUrl = configuration.GetSection("TargetSettings")["NgrokUrl"];
     }
 
@@ -39,6 +40,9 @@ public class ForwardingController : ControllerBase
         // تمرير الرؤوس الواردة للطلب الأصلي
         foreach (var header in Request.Headers)
         {
+            // استثناء رأس Host
+            if (header.Key.Equals("Host", StringComparison.OrdinalIgnoreCase))
+                continue;
             if (!requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray()))
             {
                 requestMessage.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
@@ -73,6 +77,9 @@ public class ForwardingController : ControllerBase
 
         foreach (var header in Request.Headers)
         {
+            // استثناء رأس Host
+            if (header.Key.Equals("Host", StringComparison.OrdinalIgnoreCase))
+                continue;
             requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
         }
 

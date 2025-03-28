@@ -10,6 +10,12 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient("NoSSLValidation")
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+    });
+
 
 var app = builder.Build();
 
