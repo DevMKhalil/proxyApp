@@ -29,7 +29,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // استخدام ميدلوير التحقق من API Key
-app.UseMiddleware<ApiKeyMiddleware>();
+//app.UseMiddleware<ApiKeyMiddleware>();
+app.UseMiddleware<TokenAuthenticationMiddleware>();
 
 app.UseAuthorization();
 app.MapControllers();

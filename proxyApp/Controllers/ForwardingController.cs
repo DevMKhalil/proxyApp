@@ -51,6 +51,17 @@ public class ForwardingController : ControllerBase
 
         // إرسال الطلب وإعادة الرد كما هو
         var responseMessage = await _httpClient.SendAsync(requestMessage);
+
+        // نسخ رؤوس الاستجابة من responseMessage إلى HttpContext.Response
+        foreach (var header in responseMessage.Headers)
+        {
+            HttpContext.Response.Headers[header.Key] = string.Join(",", header.Value);
+        }
+        foreach (var header in responseMessage.Content.Headers)
+        {
+            HttpContext.Response.Headers[header.Key] = string.Join(",", header.Value);
+        }
+
         var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
         return new ContentResult
@@ -84,6 +95,17 @@ public class ForwardingController : ControllerBase
         }
 
         var responseMessage = await _httpClient.SendAsync(requestMessage);
+
+        // نسخ رؤوس الاستجابة من responseMessage إلى HttpContext.Response
+        foreach (var header in responseMessage.Headers)
+        {
+            HttpContext.Response.Headers[header.Key] = string.Join(",", header.Value);
+        }
+        foreach (var header in responseMessage.Content.Headers)
+        {
+            HttpContext.Response.Headers[header.Key] = string.Join(",", header.Value);
+        }
+
         var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
         return new ContentResult
