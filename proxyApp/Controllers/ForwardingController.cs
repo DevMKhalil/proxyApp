@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using proxyApp;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -8,14 +9,16 @@ using System.Threading.Tasks;
 public class ForwardingController : ControllerBase
 {
     private readonly HttpClient _httpClient;
-    private readonly string _ngrokUrl;
+    private readonly INgrokUrlService _ngrokUrlService;
 
     // حقن HttpClient وإعدادات ngrok من التكوين
-    public ForwardingController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+    public ForwardingController(
+        IHttpClientFactory httpClientFactory,
+        INgrokUrlService ngrokUrlService)
     {
         //_httpClient = httpClientFactory.CreateClient();
         _httpClient = httpClientFactory.CreateClient("NoSSLValidation");
-        _ngrokUrl = configuration.GetSection("TargetSettings")["NgrokUrl"];
+        _ngrokUrlService = ngrokUrlService;
     }
 
     /// <summary>
@@ -25,7 +28,7 @@ public class ForwardingController : ControllerBase
     public async Task<IActionResult> PostForward()
     {
         // بناء عنوان الهدف بدمج ngrok مع بقية المسار ومعاملات الاستعلام إن وجدت.
-        var targetUrl = _ngrokUrl + "/" + Request.Path.Value?.Substring("/api/forwarding".Length).TrimStart('/');
+        var targetUrl = _ngrokUrlService.GetNgrokUrl() + "/" + Request.Path.Value?.Substring("/api/forwarding".Length).TrimStart('/');
         if (Request.QueryString.HasValue)
         {
             targetUrl += Request.QueryString.Value;
@@ -92,7 +95,7 @@ public class ForwardingController : ControllerBase
     [HttpGet("{**catchAll}")]
     public async Task<IActionResult> GetForward()
     {
-        var targetUrl = _ngrokUrl + "/" + Request.Path.Value?.Substring("/api/forwarding".Length).TrimStart('/');
+        var targetUrl = _ngrokUrlService.GetNgrokUrl() + "/" + Request.Path.Value?.Substring("/api/forwarding".Length).TrimStart('/');
         if (Request.QueryString.HasValue)
         {
             targetUrl += Request.QueryString.Value;

@@ -16,6 +16,13 @@ public class TokenAuthenticationMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
+        // Exclude the base route ("/") from token authentication
+        if (context.Request.Path == "/" || context.Request.Path.StartsWithSegments("/home"))
+        {
+            await _next(context);
+            return;
+        }
+
         // إذا كان الطلب OPTIONS، نتعامل معه كطلب "Preflight" ونسمح له بالمرور
         if (context.Request.Method == HttpMethods.Options)
         {
