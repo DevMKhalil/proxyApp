@@ -55,10 +55,24 @@ public class ForwardingController : ControllerBase
         // نسخ رؤوس الاستجابة من responseMessage إلى HttpContext.Response
         foreach (var header in responseMessage.Headers)
         {
+            // تجاهل الرؤوس التي قد تسبب تضارباً
+            if (header.Key.Equals("Transfer-Encoding", StringComparison.OrdinalIgnoreCase) ||
+                header.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             HttpContext.Response.Headers[header.Key] = string.Join(",", header.Value);
         }
         foreach (var header in responseMessage.Content.Headers)
         {
+            // تجاهل الرؤوس التي قد تسبب تضارباً
+            if (header.Key.Equals("Transfer-Encoding", StringComparison.OrdinalIgnoreCase) ||
+                header.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             HttpContext.Response.Headers[header.Key] = string.Join(",", header.Value);
         }
 
@@ -99,10 +113,24 @@ public class ForwardingController : ControllerBase
         // نسخ رؤوس الاستجابة من responseMessage إلى HttpContext.Response
         foreach (var header in responseMessage.Headers)
         {
+            // تجاهل الرؤوس التي قد تسبب تضارباً
+            if (header.Key.Equals("Transfer-Encoding", StringComparison.OrdinalIgnoreCase) ||
+                header.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             HttpContext.Response.Headers[header.Key] = string.Join(",", header.Value);
         }
         foreach (var header in responseMessage.Content.Headers)
         {
+            // تجاهل الرؤوس التي قد تسبب تضارباً
+            if (header.Key.Equals("Transfer-Encoding", StringComparison.OrdinalIgnoreCase) ||
+                header.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             HttpContext.Response.Headers[header.Key] = string.Join(",", header.Value);
         }
 
