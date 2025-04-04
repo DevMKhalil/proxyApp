@@ -113,7 +113,7 @@ This project is a reverse proxy application built with ASP.NET Core. It forwards
 
 ## License
 
-*(Add your license information here if applicable.)*
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Author
 
