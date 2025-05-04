@@ -48,12 +48,12 @@ public class TokenAuthenticationMiddleware
         var token = authHeader.ToString().Split(' ').Last();
 
         // مقارنة التوكن مع القيمة المتوقعة
-        if (token != _expectedToken)
-        {
-            context.Response.StatusCode = 401;
-            await context.Response.WriteAsync("Unauthorized client.");
-            return;
-        }
+        //if (token != _expectedToken)
+        //{
+        //    context.Response.StatusCode = 401;
+        //    await context.Response.WriteAsync("Unauthorized client.");
+        //    return;
+        //}
 
         // إذا كان التوكن صحيحاً، استمر في معالجة الطلب
         await _next(context);
